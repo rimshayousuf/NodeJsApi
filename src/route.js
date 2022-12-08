@@ -1,41 +1,52 @@
 
 const express = require('express');
-const route = express();
+const router = express.Router();
+const {checkAuth} = require("./middleware/validateauth");
 
 //importing controller
 const Customercontroller = require('./controller/customer');
 const Ordercontroller = require('./controller/order');
 const Productcontroller = require('./controller/product');
+const Logincontroller = require('./controller/login');
 
-//creating route
-//route.get('/index', controller.index);
-route.get('/customer/list',Customercontroller.list);
-route.post('/customer/create',Customercontroller.create);
-route.put('/customer/update/:id',Customercontroller.update);
-route.get('/customer/get/:id',Customercontroller.get);
-route.delete('/customer/delete/:id',Customercontroller.delete);
+//creating router
+//router.get('/index', controller.index);
+// router.get('/customer/list',CheckAuth.checkauth,Customercontroller.list);
+
+router.get('/customer/list',checkAuth, (req, res)=> {
+    Customercontroller.list(req,res)
+})
+
+
+router.post('/login', Logincontroller.login);
+router.post('/customer/create', Customercontroller.create);
+router.put('/customer/update/:id', Customercontroller.update);
+// router.get('/customer/get/:id', CheckAuth,function (req, res) {
+//     Customercontroller.get(req,res)
+// });
+router.delete('/customer/delete/:id', Customercontroller.delete);
 
 //importing controller
 
 
-//creating route
-//route.get('/index', controller.index);
-route.get('/order/list',Ordercontroller.list);
-route.post('/order/create',Ordercontroller.create);
-route.put('/order/update/:id',Ordercontroller.update);
-route.get('/order/get/:id',Ordercontroller.get);
-route.delete('/order/delete/:id',Ordercontroller.delete);
+//creating router
+//router.get('/index', controller.index);
+router.get('/order/list', Ordercontroller.list);
+router.post('/order/create', Ordercontroller.create);
+router.put('/order/update/:id', Ordercontroller.update);
+router.get('/order/get/:id', Ordercontroller.get);
+router.delete('/order/delete/:id', Ordercontroller.delete);
 
 //importing controller
 
-//creating route
-//route.get('/index', controller.index);
-route.get('/product/list',Productcontroller.list);
-route.post('/product/create',Productcontroller.create);
-route.put('/product/update/:id',Productcontroller.update);
-route.get('/product/get/:id',Productcontroller.get);
-route.delete('/product/delete/:id',Productcontroller.delete);
+//creating router
+//router.get('/index', controller.index);
+router.get('/product/list', Productcontroller.list);
+router.post('/product/create', Productcontroller.create);
+router.put('/product/update/:id', Productcontroller.update);
+router.get('/product/get/:id', Productcontroller.get);
+router.delete('/product/delete/:id', Productcontroller.delete);
 
 
-//export route
-module.exports = route;
+//export router
+module.exports = router;
