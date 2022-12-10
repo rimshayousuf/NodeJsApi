@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 // importing connection database
 var sequelize = require('../database');
 
-var Order = sequelize.define('OrderMaster', {
+var OrderMaster = sequelize.define('Order_Master', {
   oid: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -19,4 +19,4 @@ var Order = sequelize.define('OrderMaster', {
   isaprove: Sequelize.BOOLEAN
 });
 
-module.exports = Order;
+module.exports = OrderMaster;

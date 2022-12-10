@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 // importing connection database
 var sequelize = require('../database');
 
-var pImages = sequelize.define('ProductImages', {
+var ProductImages = sequelize.define('Product_Images', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -13,4 +13,4 @@ var pImages = sequelize.define('ProductImages', {
   imgurl: Sequelize.STRING
 });
 
-module.exports = pImages;
+module.exports = ProductImages;
