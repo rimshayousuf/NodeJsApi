@@ -25,12 +25,15 @@ controller.list = async (req, res) => {
   controller.create = async ( req, res) =>{
 
     try {
+       //product Master work
         const response = await Product.create({
             pname:req.body.header.name,
             price:req.body.header.price,
             pdiscount:req.body.header.discount,
             stock:req.body.header.stock,       
           });
+
+        //product detail work
           let images = req.body.details;
           let arr =[];
           images.map((value)=>{
@@ -51,58 +54,54 @@ controller.list = async (req, res) => {
 
         try {
       
-            const { id } = req.params.id;
+            const id = req.params.id;
       
-          const response = await Customers.update({
-            pname:req.body.name,
-            price:req.body.price,
-            pdiscount:req.body.discount,
-            stock:req.body.stock,
+          const response = await Product.update({
+            pname:req.body.header.name,
+            price:req.body.header.price,
+            pdiscount:req.body.header.discount,
+            stock:req.body.header.stock,
             
           },{
-            where: { id: id}
-          })
-          .then(function(data){
-            const res = { success: true, data: data, message:"updated successful" }
-            return res;
-          })
-          .catch(error=>{
-            const res = { success: false, error: error }
-            return res;
-          })
-          res.json(response);
+            where: { pid: id}
+          });
 
-        } catch (e) {
-          console.log(e);
-        }
+           await ProductImages.destroy({
+          where: { pid: id }
+    })
+           //product detail work
+           let images = req.body.details;
+           let arr =[];
+           images.map((value)=>{
+              let obj ={
+               pid : id,
+               imgurl:value
+              }
+             arr.push(obj);
+           });
+            let pimg = await ProductImages.bulkCreate(arr);
+            res.send("record updated!");
+           res.json(response);
+       
+         } catch (e) {
+           console.log(e);
+         }
       }
       
       controller.get = async ( req, res) =>{
       
         try {
       
-          const { id } = req.params.id;
-      
-          const response = await Customers.findAll({
-            where: { id: id}
-            // where: { id: [ 1, 2, 4 ] }
-            // like: { name: "Milan" }
-            // where: {
-            //   name: {
-            //     [Op.like]: '%Milan%'
-            //   }
-     // }
-    })
-    .then( function(data){
-      const res = { success: true, data: data }
-      return res;
-    })
-    .catch(error => {
-      const res = { success: false, error: error }
-      return res;
-    })
-    res.json(response);
+          const id = req.params.id;
 
+          const response = await Product.findOne({
+            where : { pid:id }
+           })
+          const images = await ProductImages.findAll({
+           where : { pid:id }
+           })
+          response.dataValues.images = images;
+          res.json(response);
   } catch (e) {
     console.log(e);
   }
@@ -111,21 +110,19 @@ controller.delete = async ( req, res) =>{
 
     try {
   
-      const { id } = req.params.id;
+      const id = req.params.id;
   
-      const response = await Customers.destroy({
-        where: { id: id }
-      })
-      .then( function(data){
-        const res = { success: true, data: data, message:"Deleted successful" }
-        return res;
-      })
-      .catch(error => {
-        const res = { success: false, error: error }
-        return res;
-      })
-      res.json(response);
-    } catch (e) {
+      const response = await Product.destroy({
+        where: { pid: id }
+      });
+      await ProductImages.destroy({
+        where: { pid: id }
+  })
+  res.send("record deleted Successfully!");
+  res.json(response);
+ } 
+ 
+ catch (e) {
         console.log(e);
       }
     }  

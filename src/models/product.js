@@ -3,7 +3,7 @@ var Sequelize = require('sequelize');
 // importing connection database
 var sequelize = require('../database');
 
-var Product = sequelize.define('Product', {
+var Product = sequelize.define('products', {
   pid: {
     type: Sequelize.INTEGER,
     primaryKey: true,
